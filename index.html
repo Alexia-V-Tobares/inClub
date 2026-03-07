@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Registro de Asistentes</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #111827;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --accent: #3b82f6;
+      --danger: #ef4444;
+      --success: #22c55e;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, #0b1220, #0f172a 30%, #0b1220);
+      color: var(--text);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .container {
+      max-width: 960px;
+      width: 100%;
+      display: grid;
+      gap: 24px;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 900px) {
+      .container { grid-template-columns: 1fr 1.2fr; }
+    }
+    .card {
+      background: rgba(17, 24, 39, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+      backdrop-filter: blur(6px);
+      padding: 20px;
+    }
+    h1 {
+      margin: 0 0 12px;
+      font-size: 28px;
+      letter-spacing: 0.2px;
+    }
+    p.desc { margin: 0 0 18px; color: var(--muted); }
+    label {
+      display: block;
+      font-weight: 600;
+      margin: 16px 0 6px;
+    }
+    input[type="text"], input[type="number"], select {
+      width: 100%;
+      padding: 10px 12px;
+      background: #111827;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 8px;
+      color: var(--text);
+      outline: none;
+    }
+    input::placeholder { color: #6b7280; }
+    .actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 18px;
+    }
+    button {
+      appearance: none;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-weight: 700;
+      cursor: pointer;
+      background: var(--accent);
+      color: white;
+    }
+    button.sec { background: #374151; }
+    .status {
+      margin-top: 10px;
+      min-height: 24px;
+      font-weight: 600;
+    }
+    .status.ok { color: var(--success); }
+    .status.err { color: var(--danger); }
+    .list-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .total {
+      color: var(--muted);
+      font-weight: 600;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    thead { background: #0b1220; }
+    th, td {
+      text-align: left;
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    tbody tr:hover { background: rgba(255,255,255,0.04); }
+    .footer-note { color: var(--muted); font-size: 12px; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <section class="card">
+      <h1>Registro de Asistentes</h1>
+      <p class="desc">Ingresa tus datos para acceder al club.</p>
+      <form id="form-registro">
+        <label for="nombre">Nombre completo</label>
+        <input id="nombre" name="nombre" type="text" placeholder="Ej: Juan Pérez" required />
+
+        <label for="edad">Edad</label>
+        <input id="edad" name="edad" type="number" min="0" step="1" placeholder="Ej: 23" required />
+
+        <label for="entrada">¿Tienes entrada?</label>
+        <select id="entrada" name="tiene_entrada">
+          <option value="si">Sí</option>
+          <option value="no">No</option>
+        </select>
+
+        <div class="actions">
+          <button type="submit">Registrar</button>
+          <button type="button" class="sec" id="limpiar">Limpiar</button>
+        </div>
+        <div id="status" class="status"></div>
+      </form>
+      <p class="footer-note">Requisitos: ser mayor de 18 y tener entrada "Sí".</p>
+    </section>
+
+    <section class="card">
+      <div class="list-header">
+        <h2>Listado</h2>
+        <div class="total">Total: <span id="total">0</span></div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Nombre</th>
+            <th>Edad</th>
+            <th>Fecha y hora</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </section>
+  </div>
+
+  <script>
+    const api = {
+      listar: async () => {
+        const r = await fetch("/api/asistentes");
+        if (!r.ok) throw new Error("Error al cargar asistentes");
+        return r.json();
+      },
+      registrar: async (payload) => {
+        const r = await fetch("/api/asistentes", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const data = await r.json();
+        if (!r.ok) {
+          throw new Error(data?.mensaje || "Ocurrió un error");
+        }
+        return data;
+      },
+    };
+
+    const tbody = document.getElementById("tbody");
+    const total = document.getElementById("total");
+    const statusEl = document.getElementById("status");
+    const form = document.getElementById("form-registro");
+    const limpiar = document.getElementById("limpiar");
+    const createdTimes = {};
+
+    function renderListado(list) {
+      tbody.innerHTML = "";
+      list.forEach((p, idx) => {
+        const tr = document.createElement("tr");
+        const key = `${p.nombre}|${p.edad}`;
+        const fecha = p.fecha || createdTimes[key] || "-";
+        tr.innerHTML = `
+          <td>${idx + 1}</td>
+          <td>${p.nombre}</td>
+          <td>${p.edad}</td>
+          <td>${fecha}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+      total.textContent = String(list.length);
+    }
+
+    async function cargar() {
+      try {
+        const { asistentes } = await api.listar();
+        renderListado(asistentes || []);
+      } catch (e) {
+        statusEl.textContent = e.message;
+        statusEl.className = "status err";
+      }
+    }
+
+    form.addEventListener("submit", async (ev) => {
+      ev.preventDefault();
+      const nombre = document.getElementById("nombre").value.trim();
+      const edad = document.getElementById("edad").value.trim();
+      const tiene_entrada = document.getElementById("entrada").value;
+
+      statusEl.textContent = "";
+      statusEl.className = "status";
+
+      try {
+        const res = await api.registrar({ nombre, edad, tiene_entrada });
+        statusEl.textContent = res.mensaje || "Registrado";
+        statusEl.className = "status ok";
+        if (res.asistente?.nombre && res.asistente?.edad != null) {
+          const key = `${res.asistente.nombre}|${res.asistente.edad}`;
+          createdTimes[key] = new Date().toLocaleString();
+        }
+        form.reset();
+        document.getElementById("entrada").value = "si";
+        await cargar();
+      } catch (e) {
+        statusEl.textContent = e.message;
+        statusEl.className = "status err";
+      }
+    });
+
+    limpiar.addEventListener("click", () => {
+      form.reset();
+      document.getElementById("entrada").value = "si";
+      statusEl.textContent = "";
+      statusEl.className = "status";
+    });
+
+    cargar();
+  </script>
+</body>
+</html>
