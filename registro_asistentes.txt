@@ -1,6 +1,0 @@
------Registro de la noche-----
-Nombre: ALEXIA TOBARES | Edad: 21
-Nombre: LEANDRO MONTENEGRO | Edad: 45
-Nombre: ALEXIA TOBARES | Edad: 21
-Nombre: LEANDRO MONTENEGRO | Edad: 22
-Nombre: CAMILA MARTIN | Edad: 23
