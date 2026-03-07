@@ -26,4 +26,4 @@ Este proyecto fue desarrollado utilizando el IDE **Trae**, aprovechando sus capa
 ## 📦 Instalación y Uso
 1. Clona este repositorio:
    ```bash
-   git clone [https://github.com/Alexia-V-Tobares/gestion-asistencias-club.git](https://github.com/Alexia-V-Tobares/gestion-asistencias-club.git)
+   git clone [https://github.com/Alexia-V-Tobares/inClub.git](https://github.com/Alexia-V-Tobares/inClub.git)

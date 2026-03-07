@@ -3,90 +3,140 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Registro de Asistentes</title>
+  <title>inClub | Registro de Asistentes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Poppins:wght@700;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0f172a;
-      --card: #111827;
-      --text: #e5e7eb;
-      --muted: #9ca3af;
-      --accent: #3b82f6;
-      --danger: #ef4444;
-      --success: #22c55e;
+      --header: #53FF45;
+      --footer: #53FF45;
+      --bg: #FFFCF7;
+      --card: #1E2EDE;
+      --text-on-card: #FFFCF7;
+      --text: #1e293b;
+      --muted: #334155;
+      --accent: #53FF45;
+      --danger: #d91c1c;
+      --success: #0f9d58;
+      --ticket: #FFD54A;
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      background: linear-gradient(180deg, #0b1220, #0f172a 30%, #0b1220);
+      background: var(--bg);
       color: var(--text);
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
       min-height: 100vh;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
+      flex-direction: column;
+      position: relative;
+      overflow-x: hidden;
+      z-index: 0;
     }
-    .container {
-      max-width: 960px;
-      width: 100%;
-      display: grid;
-      gap: 24px;
-      grid-template-columns: 1fr;
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      bottom: 40px; /* no cubre el footer */
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='140' viewBox='0 0 200 140'%3E%3Cg stroke='%23FFD54A' stroke-width='2' fill='none' stroke-opacity='0.28'%3E%3Cg transform='translate(100 70) rotate(45) translate(-100 -70)'%3E%3Crect x='30' y='25' width='140' height='90' rx='6' ry='6'/%3E%3Ccircle cx='30' cy='70' r='12'/%3E%3Ccircle cx='170' cy='70' r='12'/%3E%3Cline x1='60' y1='25' x2='60' y2='115' stroke-dasharray='6 8'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 220px 180px;
+      opacity: 1;
+    }
+    .site-header {
+      background: var(--header);
+      color: #FFFCF7;
+      padding: 28px 32px;
+      font-weight: 900;
+      font-size: 46px;
+      letter-spacing: 0.4px;
+      font-family: "Fredoka", "Poppins", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      line-height: 1;
+      z-index: 1;
     }
     @media (min-width: 900px) {
-      .container { grid-template-columns: 1fr 1.2fr; }
+      .site-header { font-size: 56px; padding: 32px 40px; }
+    }
+    .main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px 20px;
+      position: relative;
+      z-index: 1;
+    }
+    .cards {
+      width: 100%;
+      max-width: 1100px;
+      display: grid;
+      grid-template-columns: minmax(320px, 520px);
+      gap: 24px;
+      justify-content: center;
+      align-items: start;
+    }
+    .cards.two-cols {
+      grid-template-columns: repeat(2, minmax(300px, 1fr));
     }
     .card {
-      background: rgba(17, 24, 39, 0.85);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 12px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
-      backdrop-filter: blur(6px);
-      padding: 20px;
+      background: var(--card);
+      color: var(--text-on-card);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
     }
     h1 {
       margin: 0 0 12px;
       font-size: 28px;
       letter-spacing: 0.2px;
     }
-    p.desc { margin: 0 0 18px; color: var(--muted); }
+    p.desc { margin: 0 0 18px; color: var(--text-on-card); opacity: 0.9; }
     label {
       display: block;
-      font-weight: 600;
+      font-weight: 700;
       margin: 16px 0 6px;
     }
     input[type="text"], input[type="number"], select {
       width: 100%;
       padding: 10px 12px;
-      background: #111827;
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 8px;
-      color: var(--text);
+      background: var(--bg);
+      border: 2px solid rgba(0,0,0,0.08);
+      border-radius: 10px;
+      color: #0f172a;
       outline: none;
     }
-    input::placeholder { color: #6b7280; }
+    input::placeholder { color: #64748b; }
     .actions {
       display: flex;
       gap: 12px;
       margin-top: 18px;
+      flex-wrap: wrap;
     }
     button {
       appearance: none;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       padding: 10px 14px;
-      font-weight: 700;
+      font-weight: 800;
       cursor: pointer;
       background: var(--accent);
-      color: white;
+      color: #1b1b1b;
     }
-    button.sec { background: #374151; }
+    button.sec { background: #0ea5e9; color: white; }
+    .toggle-area {
+      margin-top: 16px;
+      display: flex;
+      justify-content: flex-end;
+    }
     .status {
       margin-top: 10px;
       min-height: 24px;
-      font-weight: 600;
+      font-weight: 700;
     }
-    .status.ok { color: var(--success); }
+    .status.ok { color: var(--accent); }
     .status.err { color: var(--danger); }
     .list-header {
       display: flex;
@@ -96,71 +146,80 @@
       margin-bottom: 12px;
     }
     .total {
-      color: var(--muted);
-      font-weight: 600;
+      color: var(--text-on-card);
+      font-weight: 700;
+      opacity: 0.9;
     }
     table {
       width: 100%;
       border-collapse: collapse;
       overflow: hidden;
-      border-radius: 8px;
-      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      background: rgba(255,255,255,0.06);
     }
-    thead { background: #0b1220; }
+    thead { background: rgba(0,0,0,0.12); }
     th, td {
       text-align: left;
       padding: 10px 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
+      border-bottom: 1px solid rgba(255,255,255,0.15);
     }
-    tbody tr:hover { background: rgba(255,255,255,0.04); }
-    .footer-note { color: var(--muted); font-size: 12px; margin-top: 10px; }
+    tbody tr:hover { background: rgba(255,255,255,0.08); }
+    .footer-note { color: var(--text-on-card); opacity: 0.85; font-size: 12px; margin-top: 10px; }
+    .site-footer {
+      background: var(--footer);
+      height: 40px;
+    }
+    .hidden { display: none; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <section class="card">
-      <h1>Registro de Asistentes</h1>
-      <p class="desc">Ingresa tus datos para acceder al club.</p>
-      <form id="form-registro">
-        <label for="nombre">Nombre completo</label>
-        <input id="nombre" name="nombre" type="text" placeholder="Ej: Juan Pérez" required />
-
-        <label for="edad">Edad</label>
-        <input id="edad" name="edad" type="number" min="0" step="1" placeholder="Ej: 23" required />
-
-        <label for="entrada">¿Tienes entrada?</label>
-        <select id="entrada" name="tiene_entrada">
-          <option value="si">Sí</option>
-          <option value="no">No</option>
-        </select>
-
-        <div class="actions">
-          <button type="submit">Registrar</button>
-          <button type="button" class="sec" id="limpiar">Limpiar</button>
+  <header class="site-header">inClub</header>
+  <main class="main">
+    <div class="cards" id="cards">
+      <section class="card" id="panel-registro">
+        <h1>Registro de Asistentes</h1>
+        <p class="desc">Ingresa tus datos para acceder al club.</p>
+        <form id="form-registro">
+          <label for="nombre">Nombre completo</label>
+          <input id="nombre" name="nombre" type="text" placeholder="Ej: Juan Pérez" required />
+          <label for="edad">Edad</label>
+          <input id="edad" name="edad" type="number" min="0" step="1" placeholder="Ej: 23" required />
+          <label for="entrada">¿Tienes entrada?</label>
+          <select id="entrada" name="tiene_entrada">
+            <option value="si">Sí</option>
+            <option value="no">No</option>
+          </select>
+          <div class="actions">
+            <button type="submit">Registrar</button>
+            <button type="button" class="sec" id="limpiar">Limpiar</button>
+          </div>
+          <div id="status" class="status"></div>
+        </form>
+        <div class="toggle-area">
+          <button type="button" id="toggle-list">Visualizar listado en tiempo real</button>
         </div>
-        <div id="status" class="status"></div>
-      </form>
-      <p class="footer-note">Requisitos: ser mayor de 18 y tener entrada "Sí".</p>
-    </section>
-
-    <section class="card">
-      <div class="list-header">
-        <h2>Listado</h2>
-        <div class="total">Total: <span id="total">0</span></div>
-      </div>
-      <table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Nombre</th>
-            <th>Edad</th>
-            <th>Fecha y hora</th>
-          </tr>
-        </thead>
-        <tbody id="tbody"></tbody>
-      </table>
-    </section>
-  </div>
+        <p class="footer-note">Requisitos: ser mayor de 18 y tener entrada "Sí".</p>
+      </section>
+      <section class="card hidden" id="panel-listado">
+        <div class="list-header">
+          <h2>Listado</h2>
+          <div class="total">Total: <span id="total">0</span></div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nombre</th>
+              <th>Edad</th>
+              <th>Fecha y hora</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </section>
+    </div>
+  </main>
+  <footer class="site-footer"></footer>
 
   <script>
     const api = {
@@ -189,6 +248,10 @@
     const form = document.getElementById("form-registro");
     const limpiar = document.getElementById("limpiar");
     const createdTimes = {};
+    const toggleBtn = document.getElementById("toggle-list");
+    const panelListado = document.getElementById("panel-listado");
+    const cards = document.getElementById("cards");
+    let pollId = null;
 
     function renderListado(list) {
       tbody.innerHTML = "";
@@ -236,7 +299,9 @@
         }
         form.reset();
         document.getElementById("entrada").value = "si";
-        await cargar();
+        if (!panelListado.classList.contains("hidden")) {
+          await cargar();
+        }
       } catch (e) {
         statusEl.textContent = e.message;
         statusEl.className = "status err";
@@ -250,7 +315,30 @@
       statusEl.className = "status";
     });
 
-    cargar();
+    function startPolling() {
+      if (pollId) return;
+      pollId = setInterval(cargar, 2000);
+    }
+    function stopPolling() {
+      if (!pollId) return;
+      clearInterval(pollId);
+      pollId = null;
+    }
+    toggleBtn.addEventListener("click", async () => {
+      const isHidden = panelListado.classList.contains("hidden");
+      if (isHidden) {
+        panelListado.classList.remove("hidden");
+        cards.classList.add("two-cols");
+        toggleBtn.textContent = "Ocultar listado";
+        await cargar();
+        startPolling();
+      } else {
+        panelListado.classList.add("hidden");
+        cards.classList.remove("two-cols");
+        toggleBtn.textContent = "Visualizar listado en tiempo real";
+        stopPolling();
+      }
+    });
   </script>
 </body>
 </html>
