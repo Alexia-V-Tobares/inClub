@@ -5,6 +5,14 @@
 
 **inClub** es una solución integral para el registro de asistentes en establecimientos. El sistema combina una lógica robusta en el backend con una interfaz de usuario moderna desarrollada con asistencia de IA.
 
+<p align="center">
+  <kbd>
+    <img src="./screenshot.png" alt="Captura de Club Flow" width="600">
+  </kbd>
+  <br>
+  <em>Interfaz del sistema generada con asistencia de Trae IA</em>
+</p>
+
 ## 🚀 Innovación con IA (Trae)
 Este proyecto fue desarrollado utilizando el IDE **Trae**, aprovechando sus capacidades de autocompletado inteligente y generación de código para:
 - Diseñar una interfaz de usuario (Frontend) intuitiva y responsiva.
