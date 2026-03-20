@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, send_from_directory
-from api.funciones import puede_entrar, archivar_asistentes, cargar_asistentes
+from .funciones import puede_entrar, archivar_asistentes, cargar_asistentes
 
 app = Flask(__name__)
 
@@ -41,5 +41,4 @@ def registrar_asistente():
     return jsonify({"ok": True, "mensaje": "Bienvenido al club!", "asistente": nuevo}), 201
 
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+
