@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, send_from_directory
-from funciones import puede_entrar, archivar_asistentes, cargar_asistentes
+from api.funciones import puede_entrar, archivar_asistentes, cargar_asistentes
 
 app = Flask(__name__)
 

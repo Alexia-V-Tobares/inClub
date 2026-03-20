@@ -1,4 +1,4 @@
-from funciones import*
+from api.funciones import*
 from datetime import datetime
 
 asistencias = cargar_asistentes()
